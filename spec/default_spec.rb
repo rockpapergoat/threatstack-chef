@@ -4,7 +4,8 @@ describe 'threatstack::default' do
   context 'single-ruleset-test' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['threatstack']['rulesets'] = ['Base Rule Set']
+        node.override['threatstack']['rulesets'] = ['Base Rule Set']
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end.converge(described_recipe)
     end
 
@@ -37,8 +38,9 @@ describe 'threatstack::default' do
   context 'explicit-deploy-key' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['threatstack']['deploy_key'] = 'EFGH5678'
-        node.set['threatstack']['rulesets'] = ['Base Rule Set']
+        node.override['threatstack']['deploy_key'] = 'EFGH5678'
+        node.override['threatstack']['rulesets'] = ['Base Rule Set']
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end.converge(described_recipe)
     end
 
@@ -52,8 +54,9 @@ describe 'threatstack::default' do
   context 'multi-ruleset-test' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
-        node.set['threatstack']['rulesets'] = %w(base ubuntu cassandra)
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['rulesets'] = %w(base ubuntu cassandra)
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end.converge(described_recipe)
     end
 
@@ -71,8 +74,9 @@ describe 'threatstack::default' do
   context 'ruleset-configuration-changes' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
-        node.set['threatstack']['rulesets'] = %w(base enhanced)
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['rulesets'] = %w(base enhanced)
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end.converge(described_recipe)
     end
 
@@ -101,8 +105,9 @@ describe 'threatstack::default' do
   context 'agent-extra-args' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
-        node.set['threatstack']['agent_extra_args'] = '--foo=bar'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['agent_extra_args'] = '--foo=bar'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end.converge(described_recipe)
     end
 
@@ -116,8 +121,9 @@ describe 'threatstack::default' do
   context 'hostname-test' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
-        node.set['threatstack']['hostname'] = 'test_server-i-abc123'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['hostname'] = 'test_server-i-abc123'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end.converge(described_recipe)
     end
 
@@ -134,12 +140,31 @@ describe 'threatstack::default' do
         platform: 'ubuntu',
         version: '14.04'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end.converge(described_recipe)
     end
 
     it 'enables the threatstack-agent service' do
       expect(chef_run.ruby_block('manage cloudsight service')).to notify('service[cloudsight]').to(:enable).immediately
+    end
+  end
+
+  context 'set-config-args' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(
+        platform: 'ubuntu',
+        version: '14.04'
+      ) do |node|
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['version'] = '1.4.7'
+        node.override['threatstack']['agent_config_args'] = 'foo=bar'
+        node.override['threatstack']['feature_plan'] = 'investigate'
+      end.converge(described_recipe)
+    end
+
+    it 'writes .config_args' do
+      expect(chef_run).to render_file('/opt/threatstack/cloudsight/config/.config_args').with_content('foo=bar agent_type="i"')
     end
   end
 
@@ -149,7 +174,8 @@ describe 'threatstack::default' do
         platform: 'ubuntu',
         version: '14.04'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end.converge(described_recipe)
     end
 
@@ -164,7 +190,8 @@ describe 'threatstack::default' do
         platform: 'redhat',
         version: '6.6'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end.converge(described_recipe)
     end
 

@@ -7,7 +7,8 @@ describe 'threatstack::default' do
         platform: 'debian',
         version: '7.8'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end
       runner.converge(described_recipe)
     end
@@ -32,7 +33,8 @@ describe 'threatstack::default' do
         platform: 'ubuntu',
         version: '10.04'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end
       runner.converge(described_recipe)
     end
@@ -53,7 +55,8 @@ describe 'threatstack::default' do
         platform: 'ubuntu',
         version: '12.04'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end
       runner.converge(described_recipe)
     end
@@ -74,7 +77,8 @@ describe 'threatstack::default' do
         platform: 'ubuntu',
         version: '14.04'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end
       runner.converge(described_recipe)
     end
@@ -95,7 +99,8 @@ describe 'threatstack::default' do
         platform: 'redhat',
         version: '6.5'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end
       runner.converge(described_recipe)
     end
@@ -119,7 +124,8 @@ describe 'threatstack::default' do
         platform: 'centos',
         version: '6.5'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end
       runner.converge(described_recipe)
     end
@@ -143,7 +149,8 @@ describe 'threatstack::default' do
         platform: 'amazon',
         version: '2012.09'
       ) do |node|
-        node.set['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['deploy_key'] = 'ABCD1234'
+        node.override['threatstack']['feature_plan'] = 'investigate'
       end
       runner.converge(described_recipe)
     end
