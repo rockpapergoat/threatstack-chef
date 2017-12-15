@@ -8,14 +8,8 @@ platforms:
   - name: ubuntu-16.04
   - name: debian-7.8
   - name: centos-6.7
-    run_list:
-      - recipe[yum]
   - name: centos-7.3
-    run_list:
-      - recipe[yum]
   - name: fedora-25
-    run_list:
-      - recipe[yum]
 
 suites:
   - name: default
