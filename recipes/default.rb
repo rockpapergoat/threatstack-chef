@@ -233,6 +233,11 @@ if node['threatstack']['configure_agent']
   end
 end
 
+execute 'systemd reload' do
+  command 'systemctl daemon-reload'
+  only_if { node['init_package'] == 'systemd' }
+end
+
 # NOTE: We do not signal the cloudsight service to restart via the package
 # resource because the workflow differs between fresh installation and
 # upgrades.  The package scripts will handle this.
