@@ -207,6 +207,11 @@ describe 'threatstack::default' do
     it 'still installs the agent' do
       expect(chef_run).to upgrade_package('threatstack-agent')
     end
+
+    it 'does not enable or start threatstack service' do
+      expect(chef_run).to_not start_service('threatstack')
+      expect(chef_run).to_not enable_service('threatstack')
+    end
   end
 
   context 'hostname-test' do
