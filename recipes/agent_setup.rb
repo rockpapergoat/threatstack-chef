@@ -16,12 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-service 'threatstack' do
-  supports status: true, restart: true, start: true, stop: true
-  if platform?('amazon') && node['platform_version'] != '2'
-    provider Chef::Provider::Service::Upstart
-  end
-end
+ts_service_action = node['threatstack']['install_only'] ? %i[disable stop] : %i[enable start]
 
 if node.run_state.key?('threatstack')
   if node.run_state['threatstack'].key?('deploy_key')
@@ -65,6 +60,7 @@ execute 'tsagent setup' do
   not_if do
     ::File.exist?('/opt/threatstack/etc/tsagentd.cfg')
   end
+  not_if node['threatstack']['install_only']
   # default to delayed start in case config is needed.
   notifies :start, 'service[threatstack]'
 end
@@ -109,5 +105,14 @@ execute 'tsagent config' do
   retries 3
   timeout 10
   action :nothing
+  not_if node['threatstack']['install_only']
   notifies :restart, 'service[threatstack]'
+end
+
+service 'threatstack' do
+  supports status: true, restart: true, start: true, stop: true
+  action ts_service_action
+  if platform?('amazon') && node['platform_version'] != '2'
+    provider Chef::Provider::Service::Upstart
+  end
 end
