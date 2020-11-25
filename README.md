@@ -7,7 +7,7 @@ Threat Stack Cookbook
 [travis]: https://travis-ci.org/threatstack/threatstack-chef
 [cookbook]: https://supermarket.chef.io/cookbooks/threatstack
 
-** NOTE **: As of 2.x of this cookbook we only explicitly support chef 12.15 or greater.
+**NOTE**: As of 3.x of this cookbook we only explicitly support version 2.x of the threatstack agent and greater.
 
 Chef recipes to deploy the Threat Stack server agent
 
@@ -22,6 +22,7 @@ Platforms
 * CentOS
 * RedHat
 * Ubuntu
+* Debian
 
 Cookbooks
 ---------
@@ -48,7 +49,7 @@ Usage
 
 1. Add this cookbook to your Chef Server or add to your Berksfile
   ```
-  cookbook 'threatstack', '~> 1.0.0'
+  cookbook 'threatstack', '~> 3.0.0'
   ```
 
 2. Add your deploy api key. The recommended way is to use an encrypted databag
@@ -60,7 +61,7 @@ Setting the key will disable the encrypted data bag lookup.
 Additionally you we can read the deploy key from the `node.run_state['threatstack']['deploy_key']` location
 Simply set the value of the deploy key in the run state at that location.
 
-3. Set the `node['threatstack']['feature_plan']` appropriately for your organzation
+3. Set the `node['threatstack']['rulesets']` appropriately for your node(s). This attribute is an array.
 
 4. Add this recipe to your runlist or include in another recipe
 
@@ -69,26 +70,28 @@ Attributes
 
 `node['threatstack']['version']` - Set to pin to a specific Threat Stack agent release version.
 
-`node['threatstack']['pkg_action']` - Set to `:upgrade` if you want to take the latest release (defaults to `:install`).
-
-`node['threatstack']['pkg_opts']` - Override this if you want to send custom package options to the package resource (defaults to `nil`).
-
-`node['threatstack']['deploy_key']` - Override this with your deploy key for agent registration.
-
-`node['threatstack']['feature_plan']` - Threat Stack feature plan. (values: monitor, investigate, legacy; see: https://www.threatstack.com/plans)
-
-`node['threatstack']['data_bag_name']` - Name of the encrypted databag containing Threat Stack secrets
-
-`node['threatstack']['data_bag_item']` - Name of the encrypted databag item containing Threat Stack secrets.
-
-`node['threatstack']['rulesets']` - Set or override this with an array of rulesets to apply to the node.
+`node['threatstack']['rulesets']` - (Required) Set this with an array of ruleset(s) to apply to the node
 
 `node['threatstack']['hostname']` - register the agent in the UI by a specific name (defaults to hostname).
 
-`node['threatstack']['agent_config_args']` - array of arguments to enable platform features via `cloudsight config`.
+`node['threatstack']['ignore_failure']` - Set to true if you want the install to silently fail.
 
-`node['threatstack']['cloudsight_service_timer']` - a [Chef timer](https://docs.chef.io/resource_common.html#resource-common-notifications) to manage the agent service with.
+`node['threatstack']['deploy_key']` - (Required) Override this with your deploy key for agent registration
+
+`node['threatstack']['data_bag_name']` - Name of the encrypted databag containing Threat Stack secrets
+
+`node['threatstack']['data_bag_item']` - Name of the encrypted databag item containing Threat Stack secrets
+
+`node['threatstack']['agent_config_args']` - Additional configuration settings for setting up agent
+
+`node['threatstack']['enable_containers']` - Set this to true in order to enable container observation. Note: container capability must already be installed and running.
+
 
 Encrypted Data Bag Contents
 ===========================
 `deploy_key` - the deploy key for agent registration.
+
+Contributing enhancements/fixes
+===============================
+See the [CONTRIBUTING document](CONTRIBUTING.md) for details.
+

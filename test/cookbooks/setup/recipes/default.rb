@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: threatstack
-# Recipe:: debian
+# Cookbook Name:: setup
+# Recipe:: default
 #
 # Copyright 2014-2020, Threat Stack
 #
@@ -15,14 +15,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-package 'apt-transport-https'
-
-apt_repository 'threatstack' do
-  uri node['threatstack']['repo']['url']
-  distribution node['threatstack']['repo']['dist']
-  components node['threatstack']['repo']['components']
-  key node['threatstack']['repo']['key']
-  action :add
-end
+# Set up tests to run apt update. It's not run as part of
+# default threatstack recipe so that companies can decide
+# how often to run it on their own.
+apt_update unless platform_family?('rhel', 'fedora', 'amazon')
